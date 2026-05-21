@@ -26,11 +26,11 @@ private:
     int maxHp;
     int dmg;
     int defense;
-    std::vector<Item> Inventory;
+    std::vector<Item> inventory;
 
 public:
     // Constructor
-    Player(std::string playerName, CharClass cls) {
+    Player(const std::string playerName, const CharClass cls) {
         name = playerName;
         charClass = cls;
 
@@ -43,25 +43,77 @@ public:
         }
         maxHp = hp;
 
+    } // constructor & methods inside the class need no semicolons
+
+    std::string getName() const { return name; }
+    int getHp() const { return hp; }
+    int getDamage() const { return dmg; }
+    int getDefense() const { return defense; }
+
+    void takeDamage(int incomingDmg) {
+        int actual = incomingDmg - static_cast<int>(defense * 0.1);
+        if (actual < 1) actual = 1;
+        hp -= actual;
+        if (hp < 0) hp = 0;
     }
 
-    std::string getName() { return name; }
-    int getHp() { return hp; }
-    int getDamage() { return dmg; }
-    int getDefense() { return defense; }
-
-    void takeDamage(int dmg) {
-        int actual = dmg - defense * 0.1;
-        
-        
+    void heal(int value) {
+        hp += value;
+        if (hp > maxHp) hp = maxHp; // hp will not exceed the max hp of the character
     }
 
+    void addInventory(Item item) { 
+        inventory.push_back(item);
+        std::cout << item.name << " added to inventory!\n"; 
+    }
+
+    bool isAlive() { return hp > 0; }
+
+    void displayStats() {
+        std::string className;
+        if (charClass == CharClass::Warrior) className = "Warrior";
+        else if (charClass == CharClass::Rogue ) className = "Rogue";
+        else className = "Mage";
+
+        std::cout << "\n=== " << name << " the " << className << " ===\n";
+        std::cout << "Health: " << hp << '\n';
+        std::cout << "Damage: " << dmg << '\n';
+        std::cout << "Defense: " << defense << '\n';
+        std::cout << "Item: " << inventory.size() << '\n';
+        }
+
+}; // class definitions must end with a semicolon
+
+Player createCharacter() {
+    std::string playerName;
+    int classChoice;
+    std::cout << "Enter your name: ";
+    std::cin >> playerName;
+    std::cout << "\nChoose one of the following classes:\n";
+    std::cout << "1. Warrior\n" << "2. Rogue\n" << "3. Mage\n";
+    std::cout << "Choice: ";
+    std::cin >> classChoice;
+
+
+    CharClass cls;
+    if (classChoice == 1) cls = CharClass::Warrior;
+    else if (classChoice == 2) cls = CharClass::Rogue;
+    else cls = CharClass::Mage;
+
+    Player player(playerName, cls);
+    std::cout << "Welcome, " << playerName << "!\n";
+    player.displayStats();
+    return player;
 }
 
 
-
-
 int main() {
-    std::cout << "Game Start\n\n";
+    std::cout << "=== The Dungeon of dih ===\n\n";
+    Player player = createCharacter();
+
+    Item sword = {"Health Potion", 20, "potion"};
+    player.addInventory(sword);
+    player.displayStats();
+
     return 0;
-};
+}
