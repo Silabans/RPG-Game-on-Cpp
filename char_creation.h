@@ -29,6 +29,8 @@ private:
     int maxHp;
     int dmg;
     int defense;
+    bool blocking = false;
+    int block_value = 2;
     std::vector<Item> inventory;
 
 public:
@@ -57,10 +59,6 @@ public:
             std::cout << i + 1 << ". " << inventory[i].name << '\n';
         }
     }
-    bool hasPotion = std::any_of(inventory.begin(), inventory.end(), [](Item& item)) {
-        return item.name = 'hpotion';
-    }
-    
 
     void takeDamage(int incomingDmg) {
         int actual = incomingDmg - static_cast<int>(defense * 0.1);
@@ -68,6 +66,10 @@ public:
         hp -= actual;
         if (hp < 0) hp = 0;
     }
+
+    int getBlock() { return block_value; }
+    void setBlock(bool boolean) { blocking = boolean; }
+    bool isBlocking() { return blocking; }
 
     void heal(int value) {
         hp += value;
@@ -85,17 +87,17 @@ public:
         });
 
         if (it != inventory.end()) {
-            heal(it->value)
-            inventory.erase(it)
+            heal(it->value);
             std::cout << "You used a " << it->name << "! Recovered " << it->value << " HP\n";
-            return true
+            inventory.erase(it);
+            return true;
         }
-        std::cout << "No potions found in your inventory...\n"
+        std::cout << "No potions found in your inventory...\n";
         return false;
 
     }
 
-    bool isAlive() { return hp > 0; }
+    bool isAlive() const { return hp > 0; }
 
     void displayStats() {
         std::string className;
