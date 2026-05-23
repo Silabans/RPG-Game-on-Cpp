@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 
 // contains the types of classes
@@ -51,6 +52,15 @@ public:
     int getHp() const { return hp; }
     int getDamage() const { return dmg; }
     int getDefense() const { return defense; }
+    void getInventory() {
+        for (int i = 0; i < inventory.size(); i++) {
+            std::cout << i + 1 << ". " << inventory[i].name << '\n';
+        }
+    }
+    bool hasPotion = std::any_of(inventory.begin(), inventory.end(), [](Item& item)) {
+        return item.name = 'hpotion';
+    }
+    
 
     void takeDamage(int incomingDmg) {
         int actual = incomingDmg - static_cast<int>(defense * 0.1);
@@ -67,6 +77,22 @@ public:
     void addInventory(Item item) { 
         inventory.push_back(item);
         std::cout << item.name << " added to inventory!\n"; 
+    }
+
+    bool usePotion() {
+        auto it =  std::find_if(inventory.begin(), inventory.end(), [](Item& item) {
+            return item.type == "potion";
+        });
+
+        if (it != inventory.end()) {
+            heal(it->value)
+            inventory.erase(it)
+            std::cout << "You used a " << it->name << "! Recovered " << it->value << " HP\n";
+            return true
+        }
+        std::cout << "No potions found in your inventory...\n"
+        return false;
+
     }
 
     bool isAlive() { return hp > 0; }
