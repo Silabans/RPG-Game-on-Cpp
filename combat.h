@@ -62,27 +62,28 @@ void combat(Player& player, Enemy enemy) {
         int roll;
         roll = randomInt(0, 10);
         std::cout << "Choose your move:\n";
-        std::cout << "1. Attack\n" << "2. Brace/Defend\n" << "3. Heal\n";
+        std::cout << "1. Attack\n" << "2. Brace/Defend\n" << "3. Heal\n\n";
         std::cin >> move;
 
         if (move == "1") {
             if ((enemy.dodge && roll > 7) || (enemy.dodge == false && roll > 4)) {
                 enemy.hp -= player.getDamage();
+                std::cout << "Your attack connects! " << player.getDamage() << " damage dealt.\n\n";
             }
             else if (enemy.dodge) {
-                std::cout << "The enemy dodges you! No damage done...";
+                std::cout << "The enemy dodges you! No damage done...\n\n";
             }
             else {
-                std::cout<< "Your attack misses! Clumsy boi...";
+                std::cout<< "Your attack misses! Clumsy boi...\n\n";
             }
         }
         else if (move == "2") {
             if (roll > 2) { 
                 player.setBlock(true); 
-                std::cout << "You hunker down for defense!";
+                std::cout << "You hunker down for defense!\n\n";
             }
             else {
-                std::cout << "Uh oh...you tripped. Your brace fails!";
+                std::cout << "Uh oh...you tripped. Your brace fails!\n\n";
             }
         }
         else if (move == "3") {
@@ -92,4 +93,8 @@ void combat(Player& player, Enemy enemy) {
         enemyMove(enemy, player);
         
     }
+    if (player.isAlive()) std::cout << "Battle Won! Enter anything to proceed...\n\n";
+    else std::cout << "You are defeated!\n";
+
+
 }
