@@ -63,7 +63,7 @@ void displayHealthBar(std::string label, int max, int current) {
     std::string lostChunk(empty, '-');
 
     std::cout << label << '[' << healthChunk << lostChunk << "] -> ";
-    std::cout << current << '/' << max;
+    std::cout << current << '/' << max << '\n';
 }
 
 void combat(Player& player, Enemy enemy) {
@@ -75,7 +75,7 @@ void combat(Player& player, Enemy enemy) {
         std::string move;
         int roll;
         roll = randomInt(0, 10);
-        std::cout << "Choose your move:\n";
+        std::cout << "\nChoose your move:\n";
         std::cout << "1. Attack\n" << "2. Brace/Defend\n" << "3. Heal\n\n";
         std::cin >> move;
 
