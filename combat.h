@@ -34,7 +34,7 @@ Enemy spawnEnemy(int depth) {
 }
 
 
-void enemyMove(Enemy enemy, Player& player) {
+void enemyMove(Enemy& enemy, Player& player) {
     int move = randomInt(0, 10);
     enemy.dodge = false;
 
@@ -42,10 +42,10 @@ void enemyMove(Enemy enemy, Player& player) {
         int dmg = enemy.dmg;
         if (player.isBlocking()) {
             dmg /= player.getBlock();
-            std::cout << 'The ' << enemy.name << 'harms you but you blocked ' << dmg << ' damage!\n\n';
+            std::cout << "The " << enemy.name << "harms you but you blocked " << dmg << " damage!\n\n";
         }
         else {
-            std::cout << 'The enemy strikes you, dealing' << dmg << ' damage!\n\n';
+            std::cout << "The enemy strikes you, dealing " << dmg << " damage!\n\n";
         }
         player.takeDamage(dmg);         
     }
@@ -55,17 +55,17 @@ void enemyMove(Enemy enemy, Player& player) {
 }
 
 void combat(Player& player, Enemy enemy) {
-    std::cout << '\nA vicious ' << enemy.name << ' has challenged you!\n\n';
+    std::cout << "\nA vicious " << enemy.name << " has challenged you!\n\n";
     while (player.isAlive() && enemy.hp > 0) {
-        int move;
+        std::string move;
+        
         int roll;
-        if (player.isBlocking()) { player.setBlock(false); }
         roll = randomInt(0, 10);
         std::cout << "Choose your move:\n";
         std::cout << "1. Attack\n" << "2. Brace/Defend\n" << "3. Heal\n";
         std::cin >> move;
 
-        if (move == 1) {
+        if (move == "1") {
             if ((enemy.dodge && roll > 7) || (enemy.dodge == false && roll > 4)) {
                 enemy.hp -= player.getDamage();
             }
@@ -76,20 +76,20 @@ void combat(Player& player, Enemy enemy) {
                 std::cout<< "Your attack misses! Clumsy boi...";
             }
         }
-        else if (move == 2) {
+        else if (move == "2") {
             if (roll > 2) { 
                 player.setBlock(true); 
-                std::cout << 'You hunker down for defense!'
+                std::cout << "You hunker down for defense!";
             }
             else {
                 std::cout << "Uh oh...you tripped. Your brace fails!";
             }
         }
-        else if (move == 3) {
+        else if (move == "3") {
             player.usePotion();
         }
 
         enemyMove(enemy, player);
         
-    };
-};
+    }
+}
