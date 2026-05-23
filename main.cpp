@@ -15,12 +15,11 @@ int main() {
     int depth = 1;
 
     while (player.isAlive()) {
-        combat(player, spawnEnemy(depth));
-        depth += 1;
-        std::cout << "\n\nBattle won! Key in anything to proceed: ";
+        combat(player, spawnEnemy(depth)); depth++;
+        std::cout << "\n\nBattle won! Key in anything to proceed to the next chamber: ";
         std::cin >> userInput;
     }
-    std::cout << 'You lost! Noob lah...';
+    std::cout << "\n\nYou lost! Noob lah...\n";
 
     return 0;
 }
