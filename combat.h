@@ -38,7 +38,7 @@ void enemyMove(Enemy& enemy, Player& player) {
     int move = randomInt(0, 10);
     enemy.dodge = false;
 
-    if (move > 5) { 
+    if (move > 2) { 
         int dmg = enemy.dmg;
         if (player.isBlocking()) {
             dmg /= player.getBlock();
@@ -54,11 +54,25 @@ void enemyMove(Enemy& enemy, Player& player) {
     player.setBlock(false);
 }
 
+void displayHealthBar(std::string label, int max, int current) {
+    int barWidth = max / 5;
+    int filled = (current * barWidth) / max;
+    int empty = barWidth - filled;
+
+    std::string healthChunk(filled, '#');
+    std::string lostChunk(empty, '-');
+
+    std::cout << label << '[' << healthChunk << lostChunk << "] -> ";
+    std::cout << current << '/' << max;
+}
+
 void combat(Player& player, Enemy enemy) {
     std::cout << "\nA vicious " << enemy.name << " has challenged you!\n\n";
     while (player.isAlive() && enemy.hp > 0) {
-        std::string move;
+        displayHealthBar("Your HP: ", player.getMaxHp(), player.getHp());
+        displayHealthBar(enemy.name + "'s HP: ", enemy.maxHp, enemy.hp);
         
+        std::string move;
         int roll;
         roll = randomInt(0, 10);
         std::cout << "Choose your move:\n";

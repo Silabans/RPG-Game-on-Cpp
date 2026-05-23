@@ -51,11 +51,12 @@ public:
     } // constructor & methods inside the class need no semicolons
 
     std::string getName() const { return name; }
-    int getHp() const { return hp; }
+    int getHp() { return hp; }
+    int getMaxHp() const { return maxHp; }
     int getDamage() const { return dmg; }
     int getDefense() const { return defense; }
     void getInventory() {
-        for (int i = 0; i < inventory.size(); i++) {
+        for (int i = 0; i < (int)inventory.size(); i++) {
             std::cout << i + 1 << ". " << inventory[i].name << '\n';
         }
     }
