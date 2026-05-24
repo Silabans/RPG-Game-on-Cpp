@@ -15,10 +15,15 @@ int main() {
     int depth = 1;
 
     while (player.isAlive()) {
+        Grid playerGrid(randomInt(3, 5), randomInt(3, 5));
+        Grid gameGrid = playerGrid;
+        playerGrid.display();
         traverse();
-        std::cin >> userInput;
+        depth++;
+
     }
-    std::cout << "\nNoob lah...\n";
+
+    if (not player.isAlive()) std::cout << "\nNoob lah...\n";
 
     return 0;
 }

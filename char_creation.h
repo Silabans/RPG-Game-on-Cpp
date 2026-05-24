@@ -101,6 +101,13 @@ public:
 
     }
 
+    void updatePosition(int r, int c) {
+        pos[0] += r;
+        pos[1] += c;
+    }
+
+    std::vector<int> getPosition() { return pos; }
+
     bool isAlive() const { return hp > 0; }
 
     void displayStats() {
