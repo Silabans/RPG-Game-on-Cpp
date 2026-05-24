@@ -1,4 +1,4 @@
-#include "combat.h"
+#include "chamber.h"
 
 
 int main() {
@@ -15,7 +15,7 @@ int main() {
     int depth = 1;
 
     while (player.isAlive()) {
-        combat(player, spawnEnemy(depth)); depth++;
+        traverse();
         std::cin >> userInput;
     }
     std::cout << "\nNoob lah...\n";

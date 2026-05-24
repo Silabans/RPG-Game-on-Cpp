@@ -32,10 +32,13 @@ private:
     bool blocking = false;
     int block_value = 2;
     std::vector<Item> inventory;
+    std::vector<int> pos;
 
 public:
     // Constructor
-    Player(const std::string playerName, const CharClass cls) {
+    Player(const std::string playerName, const CharClass cls)
+        : pos(2, 0)
+    {
         name = playerName;
         charClass = cls;
 
@@ -77,7 +80,7 @@ public:
         if (hp > maxHp) hp = maxHp; // hp will not exceed the max hp of the character
     }
 
-    void addInventory(Item item) { 
+    void addInventory(const Item& item) { 
         inventory.push_back(item);
         std::cout << item.name << " added to inventory!\n"; 
     }
