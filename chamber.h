@@ -37,7 +37,7 @@ public:
     int getColumn() const { return columns; }
 
     void display() {
-        std::cout << "\n";
+        std::cout << '\n';
         std::cout << "  ";
         for (int x = 0; x < columns; x++) {
             std::cout << x << ' ';
