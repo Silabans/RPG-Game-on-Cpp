@@ -15,12 +15,9 @@ int main() {
     int depth = 1;
 
     while (player.isAlive()) {
-        Grid playerGrid(randomInt(3, 5), randomInt(3, 5));
-        Grid gameGrid = playerGrid;
-        playerGrid.display();
-        traverse();
+        Chamber chamber(depth);
+        chamber.traverse(player.getPosition()[0], player.getPosition()[1], player);
         depth++;
-
     }
 
     if (not player.isAlive()) std::cout << "\nNoob lah...\n";
