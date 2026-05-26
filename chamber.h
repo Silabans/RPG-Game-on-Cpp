@@ -56,11 +56,11 @@ public:
 
 class Chamber {
 private:
-    Grid masterGrid;
-    Grid displayGrid;
     int rows;
     int cols;
     int currentDepth;
+    Grid masterGrid;
+    Grid displayGrid;
 
     static int calcRows(int depth) { return randomInt(2 + depth / 2, 3 + depth); } // minimum value rises every 2 chambers
     static int calcCols(int depth) { return randomInt(2 + depth / 2, 3 + depth); }
@@ -103,7 +103,9 @@ public:
     }
 
     void reveal(int r, int c) {
-        displayGrid.set(r, c, masterGrid.get(r, c));
+        if (r >= 0 && r < rows && c >= 0 && c < cols) {
+            displayGrid.set(r, c, masterGrid.get(r, c));
+        }
     }
 
     void display() { displayGrid.display(); }
@@ -112,22 +114,53 @@ public:
         masterGrid.set(r, c, symbol); displayGrid.set(r, c, symbol);
     }
 
-    void traverse(int r, int c, Player& player) {
-        while (masterGrid.get(player.getPosition()) {
-            std::string move;
-            std::cin >> move;
+    void traverse(Player& player) {
+        int r_coor = player.getPosition()[0];
+        int c_coor = player.getPosition()[1];
 
-            if (masterGrid.get(r, c) == '!') { 
+        for (int dr = -1; dr <= 1; dr++)
+            for (int dc = -1; dc <= 1; dc++)
+                reveal(r_coor + dr, c_coor + dc);
+        
+        displayGrid.display();
+
+        while (player.isAlive()) {
+            if (masterGrid.get(r_coor, c_coor) == '!') { 
                 Enemy enemy = spawnEnemy(currentDepth);
                 combat(player, enemy);
+                if (player.isAlive()) masterGrid.set(r_coor, c_coor, '.');
+            }
+            else if (masterGrid.get(r_coor, c_coor) == '?') { 
+                Item hpotion = {"health potion", randomInt(15, 25), "potion"};
+                player.addInventory(hpotion);
+                masterGrid.set(r_coor, c_coor, '.');
+            }
+            else if (masterGrid.get(r_coor, c_coor) == 'O') { break; }
+
+            std::string move;
+            std::cin >> move;
+            
+            int nr = r_coor, nc = c_coor;
+            if (move == "right") { nr += 1; }
+            else if (move == "left") { nr -= 1; }
+            else if (move == "up") { nc += 1; }
+            else if (move == "down") { nc -= 1; }
+
+            if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) {
+                std::cout << "You can't go that way!\n";
+            }
+            else {
+                player.updatePosition(nr - r_coor, nc - c_coor);
             }
 
-            if (move == "right") { player.updatePosition(0, 1); }
-            else if (move == "left") { player.updatePosition(0, -1); }
-            else if (move == "up") { player.updatePosition(1, 0); }
-            else if (move == "down") { player.updatePosition(-1, 0); }
         }
-        
+        if (player.isAlive()) {
+            std::string placeholder;
+            std::cout << "\n\nYou found this chamber's exit! Key in anything to proceed...";
+            std::cin >> placeholder;
+            std::cout << '\n';
+        }
+
     }
 
 

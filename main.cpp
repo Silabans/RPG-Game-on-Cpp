@@ -14,13 +14,14 @@ int main() {
     std::cin >> userInput;
     int depth = 1;
 
-    while (player.isAlive()) {
+    while (player.isAlive() && depth <= 5) {
         Chamber chamber(depth);
-        chamber.traverse(player.getPosition()[0], player.getPosition()[1], player);
+        chamber.traverse(player);
         depth++;
     }
 
-    if (not player.isAlive()) std::cout << "\nNoob lah...\n";
+    if (!player.isAlive()) std::cout << "\nNoob lah...\n" << "Depth reached: " << depth - 1;
+    else std::cout << "Congratz! You won...ig";
 
     return 0;
 }
