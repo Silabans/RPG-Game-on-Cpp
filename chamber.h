@@ -135,7 +135,6 @@ public:
             int c_coor = player.getPosition()[1];
 
             std::string move;
-            std::cin >> move;
 
             // if std::std fails due a stream corruption (due to accidental closure of the 
             // standard input stream) or the end of file is reached for some reason.
