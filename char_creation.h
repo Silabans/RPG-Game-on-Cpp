@@ -36,11 +36,9 @@ private:
 
 public:
     // Constructor
-    Player(const std::string playerName, const CharClass cls)
-    : pos(2, 0)
+    Player(const std::string& playerName, const CharClass cls)
+    : pos(2, 0), name(playerName), charClass(cls)
     {
-        name = playerName;
-        charClass = cls;
 
         if (cls == CharClass::Warrior) {
             hp = 120; dmg = 10; defense = 10;

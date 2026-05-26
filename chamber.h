@@ -2,6 +2,7 @@
 #include "combat.h"
 #include <stdexcept> // For std::out_of_rannge
 #include <algorithm>
+#include <limits>
 
 // The idea is that there will 2 grids - one for diplaying to the player (there will be hidden 
 // elements that need to be discovered to be seen) and one for keeping the actual values of each position
@@ -135,13 +136,28 @@ public:
 
             std::string move;
             std::cin >> move;
+
+            // if std::std fails due a stream corruption (due to accidental closure of the 
+            // standard input stream) or the end of file is reached for some reason.
+            if (!(std::cin >> move)) {
+                std::cin.clear(); // Clear the error flags
+                std::string dummy;
+                std::getline(std::cin, dummy); // Flush out the remaining broken buffer
+                std::cout << "Input stream error! Retrying...\n";
+                continue;
+            }
             
             int nr = r_coor, nc = c_coor;
             if (move == "d") { nc += 1; }
             else if (move == "a") { nc -= 1; }
             else if (move == "w") { nr -= 1; }
             else if (move == "s") { nr += 1; }
-            else { std::cout << "Invalid move"; continue; }
+            else { 
+                std::cout << "Invalid move\n"; 
+                // Clear any leftover characters on the line so they don't trigger the loop again
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                continue; 
+            }
 
             if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) {
                 std::cout << "You can't go that way!\n";
