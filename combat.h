@@ -1,5 +1,6 @@
 #pragma once
 #include "char_creation.h"
+#include <random>
 
 struct Enemy {
     std::string name;
@@ -10,8 +11,11 @@ struct Enemy {
 }; // an encapsulation of the enemy stats
 
 int randomInt(int min, int max) {
-    return min + rand() % (max - min + 1); // returns a random number between the min and max value
-}; // rand() returns a huge integer, so the module restricts it to the range
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distr(min, max);
+    return distr(gen);
+}; 
 
 
 Enemy spawnEnemy(int depth) {
@@ -66,7 +70,7 @@ void displayHealthBar(std::string label, int max, int current) {
     std::cout << current << '/' << max << '\n';
 }
 
-void combat(Player& player, Enemy enemy) {
+void combat(Player& player, Enemy& enemy) {
     std::cout << "\nA vicious " << enemy.name << " has challenged you!\n\n";
     while (player.isAlive() && enemy.hp > 0) {
         displayHealthBar("Your HP: ", player.getMaxHp(), player.getHp());
