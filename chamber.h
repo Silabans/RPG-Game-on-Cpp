@@ -25,6 +25,7 @@ public:
     Grid(int r, int c, char fill = '~') : rows(r), columns(c), grid(r * c, fill) {}
 
     char get(int r, int c) const {
+        checkRange(r, c);
         return grid[position(r, c)];
     }
 
@@ -59,6 +60,7 @@ private:
     int rows;
     int cols;
     int currentDepth;
+    int playerStartC;
     Grid masterGrid;
     Grid displayGrid;
 
@@ -76,10 +78,13 @@ private:
     }
 
     void generate(int depth) {
+        playerStartC = randomInt(0, cols - 1);
+
+
         int enemies = (rows * cols) / 4;
         int potions = randomInt(0, (rows * cols) / 6);
 
-        masterGrid.set(0, randomInt(0, cols - 1), 'P'); // entrance
+        masterGrid.set(0, playerStartC, 'P'); // entrance
         masterGrid.set(rows - 1, randomInt(0, cols - 1), 'O'); // exit
 
         for (int i = 0; i < enemies; i++) {
@@ -115,16 +120,19 @@ public:
     }
 
     void traverse(Player& player) {
-        int r_coor = player.getPosition()[0];
-        int c_coor = player.getPosition()[1];
+        int startR = player.getPosition()[0];
+        int startC = player.getPosition()[1];
 
         for (int dr = -1; dr <= 1; dr++)
             for (int dc = -1; dc <= 1; dc++)
-                reveal(r_coor + dr, c_coor + dc);
+                reveal(startR + dr, startC + dc);
         
         displayGrid.display();
 
         while (player.isAlive()) {
+            int r_coor = player.getPosition()[0];
+            int c_coor = player.getPosition()[1];
+
             if (masterGrid.get(r_coor, c_coor) == '!') { 
                 Enemy enemy = spawnEnemy(currentDepth);
                 combat(player, enemy);
@@ -143,8 +151,9 @@ public:
             int nr = r_coor, nc = c_coor;
             if (move == "right") { nr += 1; }
             else if (move == "left") { nr -= 1; }
-            else if (move == "up") { nc += 1; }
-            else if (move == "down") { nc -= 1; }
+            else if (move == "up") { nc -= 1; }
+            else if (move == "down") { nc += 1; }
+            else { std::cout << "Invalid move"; continue; }
 
             if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) {
                 std::cout << "You can't go that way!\n";
@@ -152,6 +161,11 @@ public:
             else {
                 player.updatePosition(nr - r_coor, nc - c_coor);
             }
+
+            for (int dr = -1; dr <= 1; dr++)
+                for (int dc = -1; dc <= 1; dc++)
+                    reveal(nr + dr, nc + dc);
+            displayGrid.display();
 
         }
         if (player.isAlive()) {
@@ -163,5 +177,10 @@ public:
 
     }
 
+    // repositions the player to the first row after entering a new chamber
+    void placePlayer(Player& player) {
+        auto pos = player.getPosition();
+        player.updatePosition(-pos[0], playerStartC - pos[1] );
+    }
 
 };

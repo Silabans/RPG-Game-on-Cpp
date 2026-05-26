@@ -37,7 +37,7 @@ private:
 public:
     // Constructor
     Player(const std::string playerName, const CharClass cls)
-        : pos(2, 0)
+    : pos(2, 0)
     {
         name = playerName;
         charClass = cls;
@@ -106,18 +106,18 @@ public:
         pos[1] += c;
     }
 
-    std::vector<int> getPosition() { return pos; }
+    const std::vector<int>& getPosition() const { return pos; }
 
     bool isAlive() const { return hp > 0; }
 
-    void displayStats() {
+    void displayStats() const {
         std::string className;
         if (charClass == CharClass::Warrior) className = "Warrior";
         else if (charClass == CharClass::Rogue ) className = "Rogue";
         else className = "Mage";
 
         std::cout << "\n=== " << name << " the " << className << " ===\n";
-        std::cout << "Health: " << hp << '\n';
+        std::cout << "Health: " << hp << '/' << maxHp << '\n';
         std::cout << "Damage: " << dmg << '\n';
         std::cout << "Defense: " << defense << '\n';
         std::cout << "Item: " << inventory.size() << '\n';

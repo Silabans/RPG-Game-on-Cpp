@@ -4,18 +4,19 @@
 int main() {
     std::cout << "=== The Dungeon of dih ===\n\n";
     Player player = createCharacter();
-    std::string userInput;
 
     Item hpotion = {"Health Potion", 20, "potion"};
     player.addInventory(hpotion);
     player.displayStats();
 
     std::cout << "\n\nEnter anyting to start...";
+    std::string userInput;
     std::cin >> userInput;
     int depth = 1;
 
     while (player.isAlive() && depth <= 5) {
         Chamber chamber(depth);
+        chamber.placePlayer(player);
         chamber.traverse(player);
         depth++;
     }
