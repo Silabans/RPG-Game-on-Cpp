@@ -139,6 +139,8 @@ public:
             // if std::std fails due a stream corruption (due to accidental closure of the 
             // standard input stream) or the end of file is reached for some reason.
             if (!(std::cin >> move)) {
+                // note that inputs can also be taken in a conditional!
+
                 std::cin.clear(); // Clear the error flags
                 std::string dummy;
                 std::getline(std::cin, dummy); // Flush out the remaining broken buffer
