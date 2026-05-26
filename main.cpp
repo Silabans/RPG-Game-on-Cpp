@@ -2,7 +2,7 @@
 
 
 int main() {
-    std::cout << "=== The Dungeon of dih ===\n\n";
+    std::cout << "=== The Dungeon of Madness ===\n\n";
     Player player = createCharacter();
 
     Item hpotion = {"Health Potion", 20, "potion"};

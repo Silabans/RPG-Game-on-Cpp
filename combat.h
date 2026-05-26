@@ -42,7 +42,7 @@ void enemyMove(Enemy& enemy, Player& player) {
         int dmg = enemy.dmg;
         if (player.isBlocking()) {
             dmg /= player.getBlock();
-            std::cout << "The " << enemy.name << "harms you but you blocked " << dmg << " damage!\n\n";
+            std::cout << "The " << enemy.name << " harms you but you blocked " << dmg << " damage!\n\n";
         }
         else {
             std::cout << "The enemy strikes you, dealing " << dmg << " damage!\n\n";
