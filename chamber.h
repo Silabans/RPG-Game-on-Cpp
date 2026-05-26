@@ -133,26 +133,14 @@ public:
             int r_coor = player.getPosition()[0];
             int c_coor = player.getPosition()[1];
 
-            if (masterGrid.get(r_coor, c_coor) == '!') { 
-                Enemy enemy = spawnEnemy(currentDepth);
-                combat(player, enemy);
-                if (player.isAlive()) masterGrid.set(r_coor, c_coor, '.');
-            }
-            else if (masterGrid.get(r_coor, c_coor) == '?') { 
-                Item hpotion = {"health potion", randomInt(15, 25), "potion"};
-                player.addInventory(hpotion);
-                masterGrid.set(r_coor, c_coor, '.');
-            }
-            else if (masterGrid.get(r_coor, c_coor) == 'O') { break; }
-
             std::string move;
             std::cin >> move;
             
             int nr = r_coor, nc = c_coor;
-            if (move == "right") { nr += 1; }
-            else if (move == "left") { nr -= 1; }
-            else if (move == "up") { nc -= 1; }
-            else if (move == "down") { nc += 1; }
+            if (move == "d") { nc += 1; }
+            else if (move == "a") { nc -= 1; }
+            else if (move == "w") { nr -= 1; }
+            else if (move == "s") { nr += 1; }
             else { std::cout << "Invalid move"; continue; }
 
             if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) {
@@ -160,13 +148,29 @@ public:
             }
             else {
                 player.updatePosition(nr - r_coor, nc - c_coor);
+            
+                char cell = masterGrid.get(nr, nc);
+
+                if (cell == '!') { 
+                    Enemy enemy = spawnEnemy(currentDepth);
+                    combat(player, enemy);
+                }
+                else if (cell == '?') { 
+                    Item hpotion = {"health potion", randomInt(15, 25), "potion"};
+                    player.addInventory(hpotion);
+                }
+                else if (cell == 'O') { break; }
+
+                if (player.isAlive() && cell != 'O') {
+                    masterGrid.set(r_coor, c_coor, '.');
+                    masterGrid.set(nr, nc, 'P');
+                }
+
+                for (int dr = -1; dr <= 1; dr++)
+                    for (int dc = -1; dc <= 1; dc++)
+                        reveal(nr + dr, nc + dc);
+                displayGrid.display();
             }
-
-            for (int dr = -1; dr <= 1; dr++)
-                for (int dc = -1; dc <= 1; dc++)
-                    reveal(nr + dr, nc + dc);
-            displayGrid.display();
-
         }
         if (player.isAlive()) {
             std::string placeholder;
@@ -179,7 +183,7 @@ public:
 
     // repositions the player to the first row after entering a new chamber
     void placePlayer(Player& player) {
-        auto pos = player.getPosition();
+        const std::vector<int>& pos = player.getPosition();
         player.updatePosition(-pos[0], playerStartC - pos[1] );
     }
 
